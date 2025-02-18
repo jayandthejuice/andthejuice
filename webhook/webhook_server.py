@@ -8,19 +8,15 @@ def typeform_webhook():
     print("Received Webhook Data:", data)  # Print full data for debugging
 
     try:
-        # Print the full Typeform response to debug the structure
-        if not data or 'form_response' not in data:
-            raise ValueError("Invalid JSON format from Typeform")
+        # Ensure "form_response" and "answers" exist
+        answers = data.get('form_response', {}).get('answers', [])
 
-        # Extract answers
-        answers = data['form_response'].get('answers', [])
+        # Extract email from answers
         email = None
-
-        # Loop through answers to find the email field
         for answer in answers:
-            if answer.get('type') == 'email':
-                email = answer.get('email', '')
-                break  # Stop once email is found
+            if answer.get('type') == 'email':  # Look for the email type
+                email = answer.get('email', '')  # Get the email value
+                break  # Stop loop when found
 
         if not email:
             raise ValueError("No email found in Typeform response")
@@ -28,7 +24,7 @@ def typeform_webhook():
         print(f"New Submission: {email}")
 
         return jsonify({"status": "success", "message": "Webhook received"}), 200
-    
+
     except Exception as e:
         print(f"Error: {e}")  # Print error in logs
         return jsonify({"status": "error", "message": str(e)}), 400
