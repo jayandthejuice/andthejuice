@@ -62,87 +62,98 @@ def typeform_webhook():
         # 1️⃣ **Thank You Email** (Immediate)
         thank_you_message = f"""Hey {first_name},
 
-*Congrats—you just took the first step toward something big.*
+            Most traders stay stuck in the same cycle, never making real progress. But today, you did something different. You took action.
 
-Most traders stay stuck in the same cycle, never making real progress. You? You just did something different. You took action.
+            Your application is officially under review.
 
-Your application has been successfully submitted.
+            That means you’re already ahead of most traders who never even try.
 
-Keep an eye on your inbox. The next time you hear from me, it’ll be about whether you’re moving forward.
+            Keep an eye on your inbox—your next update could be the one that changes everything.
 
-In the meantime, if you’re serious about trading, take a look at my latest insights on (@jaynjuicee) on Instagram.
+            In the meantime, stay locked in. If you’re serious about trading, check out my latest insights on Instagram (@jaynjuicee)—this is just the beginning.
 
-Stay locked in.
+            See you soon,
 
-See you soon,
+            Jay
+            """
+        send_email(email, "Thank You for Your Application", thank_you_message)
 
-*Jay*
-"""
-        send_email(email, "Thank You for Your Application!", thank_you_message)
+        # 2️⃣ **Processing Email** (After 7 hours)
+        processing_message = f"""Hey {first_name},
+            Your application just moved one step forward.
 
-        # 2️⃣ **Processing Email** (After 22 hours)
-        processing_message = """Hey,
+            That means you showed commitment and readiness in your type-form answers.
 
-I just wanted to tell you that your application has moved one step forward since your submission. 
+            Right now, I’m personally reviewing your application to see if you’re the right fit for &thejuice.
 
-Right now, I am personally reviewing your application to see if you’re the right fit for &thejuice.
+            Not everyone makes it in. I’m only bringing in serious traders—the ones ready to execute and actually level up.
 
-Not everyone makes it in. I’m only bringing in serious traders—the ones who are ready to execute and actually change their game. 
+            I don’t care about quantity. I care about quality.
 
-I don’t care about quantity, I want quality traders.
+            If that’s you, stay ready. Spots are extremely limited, and once they’re gone, they’re gone.
 
-If that’s you, stay ready. Spots are limited, and once they’re gone, they’re gone.
+            You’ll hear from me soon.
 
-You’ll hear from me soon.
+            Jay
 
-– Jay
-"""
-        schedule_email(email, "Processing Your Application", processing_message, 22)
+            """
+        schedule_email(email, "Your Application Just Got One Step Closer", processing_message, 7)
 
         # 3️⃣ **Acceptance Email** (30 hours after Processing Email = 52 hours total)
         acceptance_message = f"""Hey {first_name},
 
-*Congratulations.* You’ve officially been accepted into &thejuice.
+       Congratulations. You’ve officially been accepted to be a part of &thejuice.
 
-📍 *Secure your spot before it’s gone:* [Payment Link]
+        Some members of &thejuice paid off their subscription in their first month. Others passed their  funded accounts for the first time. Whatever milestone you hit, my goal is to make sure you keep levelling up—consistently.
 
-Before you make the payment, know this—what you’re about to access has already changed lives. It all depends on how badly you want it.
+        Secure your spot here before it’s gone: https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true
 
-This includes: 
-• Attending and watching all the current and past Zoom meetings
-• Watching all the course details in depth and taking your notes
-• Engaging with the community to learn and help other traders
+        Before you make the payment, know this—what you’re about to access has already changed lives. It all depends on how badly you want it.
 
-*Not everyone gets this opportunity, because not everyone can commit to winning.*
+        You’ll have access to all of the following: 
 
-So just to be fair… if you don’t reserve your seat, I’m going to have to move it to the next person in line.
+        •⁠  ⁠Attending and watching all the current and past zoom meetings
+        •⁠  ⁠Watching all the course details in depth and taking your notes
+        •⁠  ⁠Competing for a chance to win funded accounts
+        •⁠  ⁠Q&A section to ask any questions you have
 
-Right now, payments are *LIVE, and spots are **disappearing fast**.*
+        Just to be fair… if you don’t reserve your seat, I’m going to have to move it to the next person in line.
 
-You made it this far because you’re serious about growth. Now it’s time to show it.
+        Right now, payments are LIVE.
 
-See you inside.
+        You made it this far because you’re serious about growth. Now it’s time to show it.
 
-– Jay
-"""
-        schedule_email(email, "You’ve Been Accepted!", acceptance_message, 52)
+        See you inside.
 
-        # 4️⃣ **Follow-up Email** (12 hours after Acceptance Email = 64 hours total)
-        follow_up_message = """Hey,
+        Jay
 
-Just checking in. You’ve come this far, and I want to make sure you don’t miss out.
+        """
+        schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message, 11)
 
-This is your chance to get in, join the community, and take your trading game to the next level.
+        # 4️⃣ **Follow-up Email** 
+        follow_up_message = f"""Hey {first_name},
 
-If you’re still interested, here’s your link again: [Payment Link]
+            A few days ago, you applied to &TheJuice—and you got accepted.
 
-But if you’re not serious, that’s okay too. Just know that the next round might not come anytime soon.
+            Some traders saw the opportunity, took action, and are already inside, attending Zoom calls, breaking down charts, and competing for funded accounts.
 
-Hope to see you inside.
+            You’re still on the fence.
 
-– Jay
-"""
-        schedule_email(email, "Last Chance – Secure Your Spot", follow_up_message, 64)
+            That’s fine. But I just want to ask you: What’s stopping you?
+
+            If it’s the price… consider this:
+
+            In the next 6 months, if you order a coffee from Starbucks every day you’d have made the same investment but left with nothing in return. I’m providing you with the exact strategy, weekly sessions, and challenges to make it easier for you.
+
+            If you’re serious about trading, you know what to do.
+
+            Lock in your spot before we move forward: https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true
+
+            See you on the inside,
+
+            Jay
+            """
+        schedule_email(email, "They locked in. Will you?", follow_up_message, 28)
 
         return jsonify({"status": "success", "message": "Webhook received, emails scheduled"}), 200
 
@@ -164,17 +175,17 @@ def payment_confirmation():
         # 📌 **Thank You for Payment Email**
         payment_message = """Hey,
 
-Thank you for starting this journey.
+            Thank you for starting this journey.
 
-You made the commitment, and I respect that.
+            You made the commitment, and I respect that.
 
-I can’t wait to see how much you grow inside &thejuice. It’s time to level up.
+            I can’t wait to see how much you grow inside &thejuice. It’s time to level up.
 
-Check your email for access details, and let’s get started.
+            Check your email for access details, and let’s get started.
 
-See you inside.
+            See you inside.
 
-– Jay
+            Jay
 """
         send_email(email, "Welcome to &thejuice – You’re In!", payment_message)
 
