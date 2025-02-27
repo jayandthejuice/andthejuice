@@ -13,34 +13,43 @@ SMTP_EMAIL = "jayandthejuice@gmail.com"  # Replace with your email
 SMTP_PASSWORD = "igmv gihg guya mzem"  # Replace with an App Password if using Gmail
 
 # Function to send an email
-def send_email(to_email, subject, message):
+def send_email(to_email, subject, message, is_html=False):
     try:
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(SMTP_EMAIL, SMTP_PASSWORD)
+
+            # Choose the appropriate content type
+            content_type = "text/html" if is_html else "text/plain"
             
-            # Ensure UTF-8 encoding to handle special characters
-            email_message = f"Subject: {subject}\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\n\n{message}"
-            
+            email_message = f"""Subject: {subject}
+MIME-Version: 1.0
+Content-Type: {content_type}; charset=UTF-8
+
+{message}"""
+
             server.sendmail(SMTP_EMAIL, to_email, email_message.encode("utf-8"))
         print(f"✅ Email sent to {to_email}")
     except Exception as e:
         print(f"❌ Error sending email: {e}")
 
 
+
 # Function to schedule follow-up emails
-def schedule_email(email, subject, message, delay_hours):
+def schedule_email(email, subject, message, delay_minutes, is_html=False):
     def job():
-        time.sleep(delay_hours * 3600)  # Convert hours to seconds
-        send_email(email, subject, message)
+        print(f"⏳ Waiting {delay_minutes} minutes before sending '{subject}' to {email}")
+        time.sleep(delay_minutes * 60)
+        send_email(email, subject, message, is_html=is_html)  # ✅ Pass `is_html`
     
     threading.Thread(target=job).start()
+
 
 @app.route('/webhook', methods=['POST'])
 def typeform_webhook():
     data = request.json  # Get JSON data from Typeform
     print("Received Webhook Data:", data)  # Print for debugging
-
+    delay = 5 
     try:
         # Extract Email and First Name
         answers = data.get('form_response', {}).get('answers', [])
@@ -97,63 +106,75 @@ def typeform_webhook():
             Jay
 
             """
-        schedule_email(email, "Your Application Just Got One Step Closer", processing_message, 7)
+        schedule_email(email, "Your Application Just Got One Step Closer", processing_message, delay)
 
         # 3️⃣ **Acceptance Email** (30 hours after Processing Email = 52 hours total)
-        acceptance_message = f"""Hey {first_name},
+        acceptance_message_html = f"""\
+        <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h2>Hey {first_name},</h2>
 
-       Congratulations. You’ve officially been accepted to be a part of &thejuice.
+                <p>Congratulations. You’ve officially been accepted to be a part of <strong>&TheJuice</strong>.</p>
 
-        Some members of &thejuice paid off their subscription in their first month. Others passed their  funded accounts for the first time. Whatever milestone you hit, my goal is to make sure you keep levelling up—consistently.
+                <p>Some members of &TheJuice paid off their subscription in their first month. Others passed their funded accounts for the first time. 
+                Whatever milestone you hit, my goal is to make sure you keep leveling up—consistently.</p>
 
-        Secure your spot here before it’s gone: https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true
+                <p><strong>Secure your spot here before it’s gone:</strong> 
+                <a href="https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true" target="_blank">Click here to make your payment</a>.</p>
 
-        Before you make the payment, know this—what you’re about to access has already changed lives. It all depends on how badly you want it.
+                <p><strong>Before you make the payment, know this—what you’re about to access has already changed lives.</strong> 
+                It all depends on how badly you want it.</p>
 
-        You’ll have access to all of the following: 
+                <p><strong>You’ll have access to:</strong></p>
+                <ul>
+                    <li>Attending and watching all the current and past Zoom meetings</li>
+                    <li>Watching all the course details in-depth and taking notes</li>
+                    <li>Competing for a chance to win funded accounts</li>
+                    <li>Q&A section to ask any questions you have</li>
+                </ul>
 
-        •⁠  ⁠Attending and watching all the current and past zoom meetings
-        •⁠  ⁠Watching all the course details in depth and taking your notes
-        •⁠  ⁠Competing for a chance to win funded accounts
-        •⁠  ⁠Q&A section to ask any questions you have
+                <p>Just to be fair… if you don’t reserve your seat, I’m going to have to move it to the next person in line.</p>
 
-        Just to be fair… if you don’t reserve your seat, I’m going to have to move it to the next person in line.
+                <p>Right now, payments are <strong>LIVE</strong>.</p>
 
-        Right now, payments are LIVE.
+                <p>You made it this far because you’re serious about growth. Now it’s time to show it.</p>
 
-        You made it this far because you’re serious about growth. Now it’s time to show it.
-
-        See you inside.
-
-        Jay
-
+                <p>See you inside,</p>
+                <p><strong>Jay</strong></p>
+            </body>
+        </html>
         """
-        schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message, 11)
+      
+        schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message_html, delay*2)
 
         # 4️⃣ **Follow-up Email** 
-        follow_up_message = f"""Hey {first_name},
+        follow_up_message_html = f"""\
+        <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h2>Hey {first_name},</h2>
 
-            A few days ago, you applied to &TheJuice—and you got accepted.
+                <p>A few days ago, you applied to <strong>&TheJuice</strong>—and you got accepted.</p>
 
-            Some traders saw the opportunity, took action, and are already inside, attending Zoom calls, breaking down charts, and competing for funded accounts.
+                <p>Some traders saw the opportunity, took action, and are already inside, attending Zoom calls, breaking down charts, and competing for funded accounts.</p>
 
-            You’re still on the fence.
+                <p><strong>You’re still on the fence.</strong> That’s fine. But I just want to ask you: <strong>What’s stopping you?</strong></p>
 
-            That’s fine. But I just want to ask you: What’s stopping you?
+                <p><strong>If it’s the price… consider this:</strong></p>
 
-            If it’s the price… consider this:
+                <p>In the next 6 months, if you order a coffee from Starbucks every day, you’d have made the same investment but left with nothing in return. 
+                I’m providing you with the exact strategy, weekly sessions, and challenges to make it easier for you.</p>
 
-            In the next 6 months, if you order a coffee from Starbucks every day you’d have made the same investment but left with nothing in return. I’m providing you with the exact strategy, weekly sessions, and challenges to make it easier for you.
+                <p><strong>If you’re serious about trading, you know what to do.</strong></p>
 
-            If you’re serious about trading, you know what to do.
+                <p><a href="https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true" target="_blank">Click here to secure your spot</a> before we move forward.</p>
 
-            Lock in your spot before we move forward: https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true
+                <p>See you on the inside,</p>
+                <p><strong>Jay</strong></p>
+            </body>
+        </html>
+        """
 
-            See you on the inside,
-
-            Jay
-            """
-        schedule_email(email, "They locked in. Will you?", follow_up_message, 28)
+        schedule_email(email, "They locked in. Will you?", follow_up_message_html, delay*3)
 
         return jsonify({"status": "success", "message": "Webhook received, emails scheduled"}), 200
 
