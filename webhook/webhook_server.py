@@ -43,10 +43,10 @@ def send_email(to_email, subject, message, is_html=False):
 
 
 # Function to schedule follow-up emails
-def schedule_email(email, subject, message, delay_minutes, is_html=False):
+def schedule_email(email, subject, message, delay_hour, is_html=False):
     def job():
-        print(f"⏳ Waiting {delay_minutes} minutes before sending '{subject}' to {email}")
-        time.sleep(delay_minutes * 60)
+        print(f"⏳ Waiting {delay_hour} hours before sending '{subject}' to {email}")
+        time.sleep(delay_hour * 3600)
         send_email(email, subject, message, is_html=is_html)  # ✅ Pass `is_html`
     
     threading.Thread(target=job).start()
@@ -118,7 +118,7 @@ def typeform_webhook():
                 </body>
             </html>
             """
-            schedule_email(email, "Application Update", rejection_message_html, delay, is_html=True)
+            schedule_email(email, "Application Update", rejection_message_html, 8, is_html=True)
             return jsonify({"status": "success", "message": "Thank you and rejection email scheduled"}), 200
 
         # 2️⃣ **Processing Email** (After 7 hours)
@@ -136,9 +136,9 @@ def typeform_webhook():
             </body>
         </html>
         """
-        schedule_email(email, "Your Application Just Got One Step Closer", processing_message_html, delay,is_html=True)
+        schedule_email(email, "Your Application Just Got One Step Closer", processing_message_html, 7,is_html=True)
 
-        # 3️⃣ **Acceptance Email** (30 hours after Processing Email = 52 hours total)
+        # 3️⃣ **Acceptance Email** (11 hours after Processing Email = 18 hours total)
         acceptance_message_html = f"""\
         <html>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -175,36 +175,7 @@ def typeform_webhook():
         </html>
         """
       
-        schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message_html, delay*2, is_html=True)
-
-        # 4️⃣ **Follow-up Email** 
-        follow_up_message_html = f"""\
-        <html>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
-
-                <p>A few days ago, you applied to <strong>&TheJuice</strong>—and you got accepted.</p>
-
-                <p>Some traders saw the opportunity, took action, and are already inside, attending Zoom calls, breaking down charts, and competing for funded accounts.</p>
-
-                <p><strong>You’re still on the fence.</strong> That’s fine. But I just want to ask you: <strong>What’s stopping you?</strong></p>
-
-                <p><strong>If it’s the price… consider this:</strong></p>
-
-                <p>In the next 6 months, if you order a coffee from Starbucks every day, you’d have made the same investment but left with nothing in return. 
-                I’m providing you with the exact strategy, weekly sessions, and challenges to make it easier for you.</p>
-
-                <p><strong>If you’re serious about trading, you know what to do.</strong></p>
-
-                <p><a href="https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true" target="_blank">Click here to secure your spot</a> before we move forward.</p>
-
-                <p>See you on the inside,</p>
-                <p><strong>Jay</strong></p>
-            </body>
-        </html>
-        """
-
-        schedule_email(email, "They locked in. Will you?", follow_up_message_html, delay*3,is_html=True)
+        schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message_html, 18, is_html=True)
 
         return jsonify({"status": "success", "message": "Webhook received, emails scheduled"}), 200
 
