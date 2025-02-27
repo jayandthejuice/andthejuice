@@ -62,25 +62,29 @@ def typeform_webhook():
         answers = data.get('form_response', {}).get('answers', [])
         email = None
         first_name = "there"
+        last_choice = None
 
-        # for answer in answers:
-        #     if answer.get('type') == 'email':
-        #         email = answer.get('email', '')
-        #     if answer.get('type') == 'text':  # First Name field
-        #         first_name = answer.get('text', '')
-
-        # if not email:
-        #     raise ValueError("No email found in Typeform response")
         if answers:
             first_name = answers[0].get('text', 'there')  # Always get the first answer as the first name
             for answer in answers:
                 if answer.get('type') == 'email':
                     email = answer.get('email', '')
 
+        # **Find the last multiple-choice answer**
+            for answer in reversed(answers):  # Reverse loop to get the LAST multiple-choice question
+                if answer.get('type') == 'choice':
+                    last_choice = answer.get('choice', {}).get('label', '')
+                elif answer.get('type') == 'choices':  # Handles multiple-choice selection
+                    last_choice = ", ".join(answer.get('choices', {}).get('labels', []))
+
+                if last_choice:  # Stop at the last valid choice found
+                    last_choice = last_choice.strip().lower()  # Ensure text is cleaned
+                    break
+            
         if not email:
             raise ValueError("No email found in Typeform response")
 
-        print(f"New Submission: {email}, Name: {first_name}")
+        print(f"New Submission: {email}, Name: {first_name}, Last Choice: {last_choice}")
 
         # 📌 **Automate Email Sequence**
         # 1️⃣ **Thank You Email** (Immediate)
@@ -99,6 +103,23 @@ def typeform_webhook():
         </html>
         """
         send_email(email, "Thank You for Your Application", thank_you_message_html, is_html=True)
+
+        # 📌 **Check their last answer before proceeding**
+        if last_choice == "no, let me go spend more money on coffee and stay stuck where i am forever.":
+            rejection_message_html = f"""\
+            <html>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
+                    <p>Regrettably,</p>
+                    <p>I am unable to move forward with your application at this time. While this may not be the news you hoped for, I truly appreciate the time and effort you invested in applying.</p>
+                    <p>Here’s the good news: this isn’t the end of your journey. Every great trader knows that persistence is the key to success. We encourage you to refine your skills, revisit your goals, and try applying again in the future when the next opportunity arises.</p>
+                    <p>Remember, the journey to success is built on continuous growth and determination. I’m here to support you every step of the way.</p>
+                    <p>Stay motivated, and I hope to see you back for the next round of applications.</p>
+                </body>
+            </html>
+            """
+            schedule_email(email, "Application Update", rejection_message_html, delay, is_html=True)
+            return jsonify({"status": "success", "message": "Thank you and rejection email scheduled"}), 200
 
         # 2️⃣ **Processing Email** (After 7 hours)
         processing_message_html = f"""\
