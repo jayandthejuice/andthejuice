@@ -19,20 +19,28 @@ def send_email(to_email, subject, message, is_html=False):
             server.starttls()
             server.login(SMTP_EMAIL, SMTP_PASSWORD)
 
-            # Choose the appropriate content type
-            content_type = "text/html" if is_html else "text/plain"
-            
-            email_message = f"""Subject: {subject}
-MIME-Version: 1.0
-Content-Type: {content_type}; charset=UTF-8
+            # Set proper MIME type
+            if is_html:
+                email_message = f"""\
+                MIME-Version: 1.0
+                Content-Type: text/html; charset=UTF-8
+                Subject: {subject}
 
-{message}"""
+                {message}
+                """
+            else:
+                email_message = f"""\
+                MIME-Version: 1.0
+                Content-Type: text/plain; charset=UTF-8
+                Subject: {subject}
+
+                {message}
+                """
 
             server.sendmail(SMTP_EMAIL, to_email, email_message.encode("utf-8"))
         print(f"✅ Email sent to {to_email}")
     except Exception as e:
         print(f"❌ Error sending email: {e}")
-
 
 
 # Function to schedule follow-up emails
@@ -56,11 +64,19 @@ def typeform_webhook():
         email = None
         first_name = "there"
 
-        for answer in answers:
-            if answer.get('type') == 'email':
-                email = answer.get('email', '')
-            if answer.get('type') == 'text':  # First Name field
-                first_name = answer.get('text', '')
+        # for answer in answers:
+        #     if answer.get('type') == 'email':
+        #         email = answer.get('email', '')
+        #     if answer.get('type') == 'text':  # First Name field
+        #         first_name = answer.get('text', '')
+
+        # if not email:
+        #     raise ValueError("No email found in Typeform response")
+        if answers:
+            first_name = answers[0].get('text', 'there')  # Always get the first answer as the first name
+            for answer in answers:
+                if answer.get('type') == 'email':
+                    email = answer.get('email', '')
 
         if not email:
             raise ValueError("No email found in Typeform response")
@@ -69,44 +85,38 @@ def typeform_webhook():
 
         # 📌 **Automate Email Sequence**
         # 1️⃣ **Thank You Email** (Immediate)
-        thank_you_message = f"""Hey {first_name},
-
-            Most traders stay stuck in the same cycle, never making real progress. But today, you did something different. You took action.
-
-            Your application is officially under review.
-
-            That means you’re already ahead of most traders who never even try.
-
-            Keep an eye on your inbox—your next update could be the one that changes everything.
-
-            In the meantime, stay locked in. If you’re serious about trading, check out my latest insights on Instagram (@jaynjuicee)—this is just the beginning.
-
-            See you soon,
-
-            Jay
-            """
-        send_email(email, "Thank You for Your Application", thank_you_message)
+        thank_you_message_html = f"""\
+        <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h2>Hey {first_name},</h2>
+                <p>Most traders stay stuck in the same cycle, never making real progress. But today, you did something different. You took action.</p>
+                <p>Your application is officially under review.</p>
+                <p>That means you’re already ahead of most traders who never even try.</p>
+                <p>Keep an eye on your inbox—your next update could be the one that changes everything.</p>
+                <p>In the meantime, stay locked in. If you’re serious about trading, check out my latest insights on <a href="https://www.instagram.com/jaynjuicee" target="_blank">@jaynjuicee</a>—this is just the beginning.</p>
+                <p>See you soon,</p>
+                <p><strong>Jay</strong></p>
+            </body>
+        </html>
+        """
+        send_email(email, "Thank You for Your Application", thank_you_message_html, is_html=True)
 
         # 2️⃣ **Processing Email** (After 7 hours)
-        processing_message = f"""Hey {first_name},
-            Your application just moved one step forward.
-
-            That means you showed commitment and readiness in your type-form answers.
-
-            Right now, I’m personally reviewing your application to see if you’re the right fit for &thejuice.
-
-            Not everyone makes it in. I’m only bringing in serious traders—the ones ready to execute and actually level up.
-
-            I don’t care about quantity. I care about quality.
-
-            If that’s you, stay ready. Spots are extremely limited, and once they’re gone, they’re gone.
-
-            You’ll hear from me soon.
-
-            Jay
-
-            """
-        schedule_email(email, "Your Application Just Got One Step Closer", processing_message, delay)
+        processing_message_html = f"""\
+        <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h2>Hey {first_name},</h2>
+                <p>Your application just moved one step forward.</p>
+                <p>That means you showed commitment and readiness in your Typeform answers.</p>
+                <p>Right now, I’m personally reviewing your application to see if you’re the right fit for <strong>&TheJuice</strong>.</p>
+                <p>Not everyone makes it in. I’m only bringing in serious traders—the ones ready to execute and actually level up.</p>
+                <p>If that’s you, stay ready. Spots are extremely limited, and once they’re gone, they’re gone.</p>
+                <p>You’ll hear from me soon.</p>
+                <p><strong>Jay</strong></p>
+            </body>
+        </html>
+        """
+        schedule_email(email, "Your Application Just Got One Step Closer", processing_message_html, delay,is_html=True)
 
         # 3️⃣ **Acceptance Email** (30 hours after Processing Email = 52 hours total)
         acceptance_message_html = f"""\
@@ -145,7 +155,7 @@ def typeform_webhook():
         </html>
         """
       
-        schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message_html, delay*2)
+        schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message_html, delay*2, is_html=True)
 
         # 4️⃣ **Follow-up Email** 
         follow_up_message_html = f"""\
@@ -174,7 +184,7 @@ def typeform_webhook():
         </html>
         """
 
-        schedule_email(email, "They locked in. Will you?", follow_up_message_html, delay*3)
+        schedule_email(email, "They locked in. Will you?", follow_up_message_html, delay*3,is_html=True)
 
         return jsonify({"status": "success", "message": "Webhook received, emails scheduled"}), 200
 
