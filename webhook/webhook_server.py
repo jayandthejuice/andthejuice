@@ -13,34 +13,33 @@ SMTP_EMAIL = "jayandthejuice@gmail.com"  # Replace with your email
 SMTP_PASSWORD = "igmv gihg guya mzem"  # Replace with an App Password if using Gmail
 
 # Function to send an email
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 def send_email(to_email, subject, message, is_html=False):
     try:
+        # Set up the email headers
+        msg = MIMEMultipart()
+        msg["From"] = SMTP_EMAIL
+        msg["To"] = to_email
+        msg["Subject"] = subject
+
+        # Attach content (HTML or plain text)
+        if is_html:
+            msg.attach(MIMEText(message, "html"))  # HTML Email
+        else:
+            msg.attach(MIMEText(message, "plain"))  # Plain Text Email
+
+        # Send email
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(SMTP_EMAIL, SMTP_PASSWORD)
+            server.sendmail(SMTP_EMAIL, to_email, msg.as_string())
 
-            # Set proper MIME type
-            if is_html:
-                email_message = f"""\
-                MIME-Version: 1.0
-                Content-Type: text/html; charset=UTF-8
-                Subject: {subject}
-
-                {message}
-                """
-            else:
-                email_message = f"""\
-                MIME-Version: 1.0
-                Content-Type: text/plain; charset=UTF-8
-                Subject: {subject}
-
-                {message}
-                """
-
-            server.sendmail(SMTP_EMAIL, to_email, email_message.encode("utf-8"))
         print(f"✅ Email sent to {to_email}")
     except Exception as e:
         print(f"❌ Error sending email: {e}")
+
 
 
 # Function to schedule follow-up emails
