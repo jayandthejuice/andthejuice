@@ -87,7 +87,7 @@ def typeform_webhook():
         thank_you_message_html = f"""\
         <html>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <h2>Hey {first_name},</h2>
+                <h4 style="margin-bottom: 10px;">Hey {first_name},</h4>
                 <p>Most traders stay stuck in the same cycle, never making real progress. But today, you did something different. You took action.</p>
                 <p>Your application is officially under review.</p>
                 <p>That means you’re already ahead of most traders who never even try.</p>
@@ -104,7 +104,7 @@ def typeform_webhook():
         processing_message_html = f"""\
         <html>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <h2>Hey {first_name},</h2>
+                <h4 style="margin-bottom: 10px;">Hey {first_name},</h4>
                 <p>Your application just moved one step forward.</p>
                 <p>That means you showed commitment and readiness in your Typeform answers.</p>
                 <p>Right now, I’m personally reviewing your application to see if you’re the right fit for <strong>&TheJuice</strong>.</p>
@@ -121,7 +121,7 @@ def typeform_webhook():
         acceptance_message_html = f"""\
         <html>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <h2>Hey {first_name},</h2>
+               <h4 style="margin-bottom: 10px;">Hey {first_name},</h4>
 
                 <p>Congratulations. You’ve officially been accepted to be a part of <strong>&TheJuice</strong>.</p>
 
@@ -160,7 +160,7 @@ def typeform_webhook():
         follow_up_message_html = f"""\
         <html>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <h2>Hey {first_name},</h2>
+                <h4 style="margin-bottom: 10px;">Hey {first_name},</h4>
 
                 <p>A few days ago, you applied to <strong>&TheJuice</strong>—and you got accepted.</p>
 
