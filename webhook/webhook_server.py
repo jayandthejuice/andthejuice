@@ -8,7 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
+from sqlalchemy import create_engine
 # Initialize Flask app
 app = Flask(__name__)
 
@@ -16,11 +16,16 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Use SQLite for persistent scheduling
-scheduler = BackgroundScheduler(
-    jobstores={"default": SQLAlchemyJobStore(url="sqlite:///jobs.sqlite")},
-    timezone=pytz.utc
-)
+POSTGRES_URL = os.getenv("DATABASE_URL")  # Get it from .env
+
+jobstores = {
+    "default": SQLAlchemyJobStore(url=POSTGRES_URL)  # Use PostgreSQL instead of SQLite
+}
+
+scheduler = BackgroundScheduler(jobstores=jobstores, timezone=pytz.utc)
 scheduler.start()
+print("✅ Job store initialized in PostgreSQL!")
+
 
 # Email Configuration (Use environment variables for security)
 SMTP_SERVER = "smtp.gmail.com"
