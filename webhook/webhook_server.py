@@ -25,9 +25,8 @@ scheduler.start()
 # Email Configuration (Use environment variables for security)
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-SMTP_EMAIL = os.getenv("SMTP_EMAIL")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
-
+SMTP_EMAIL = 'jayandthejuice@gmail.com'
+SMTP_PASSWORD = 'igmv gihg guya mzem'
 def send_email(email, subject, message, is_html=False):
     """ Sends an email using SMTP """
     try:
