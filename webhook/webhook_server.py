@@ -136,76 +136,76 @@ def typeform_webhook():
         send_email(email, "Thank You for Your Application", thank_you_message_html, is_html=True)
 
         # 2️⃣ **Check Rejection Condition**
-        if last_choice == "no, let me go spend more money on coffee and stay stuck where i am forever.":
-            rejection_message_html = f"""\
-            <html>
-                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                    <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
-                    <p>Regrettably,</p>
-                    <p>I am unable to move forward with your application at this time. While this may not be the news you hoped for, I truly appreciate the time and effort you invested in applying.</p>
-                    <p>Here’s the good news: this isn’t the end of your journey. Every great trader knows that persistence is the key to success. We encourage you to refine your skills, revisit your goals, and try applying again in the future when the next opportunity arises.</p>
-                    <p>Remember, the journey to success is built on continuous growth and determination. I’m here to support you every step of the way.</p>
-                    <p>Stay motivated, and I hope to see you back for the next round of applications.</p>
-                </body>
-            </html>
-            """
-            schedule_email(email, "Application Update", rejection_message_html, 8, is_html=True)
-            return jsonify({"status": "success", "message": "Thank you and rejection email scheduled"}), 200
+        # if last_choice == "no, let me go spend more money on coffee and stay stuck where i am forever.":
+        #     rejection_message_html = f"""\
+        #     <html>
+        #         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        #             <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
+        #             <p>Regrettably,</p>
+        #             <p>I am unable to move forward with your application at this time. While this may not be the news you hoped for, I truly appreciate the time and effort you invested in applying.</p>
+        #             <p>Here’s the good news: this isn’t the end of your journey. Every great trader knows that persistence is the key to success. We encourage you to refine your skills, revisit your goals, and try applying again in the future when the next opportunity arises.</p>
+        #             <p>Remember, the journey to success is built on continuous growth and determination. I’m here to support you every step of the way.</p>
+        #             <p>Stay motivated, and I hope to see you back for the next round of applications.</p>
+        #         </body>
+        #     </html>
+        #     """
+        #     schedule_email(email, "Application Update", rejection_message_html, 8, is_html=True)
+        #     return jsonify({"status": "success", "message": "Thank you and rejection email scheduled"}), 200
 
-        # 3️⃣ **Processing Email (7 Hours Later)**
-        processing_message_html = f"""\
-        <html>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
-                <p>Your application just moved one step forward.</p>
-                <p>That means you showed commitment and readiness in your Typeform answers.</p>
-                <p>Right now, I’m personally reviewing your application to see if you’re the right fit for <strong>&TheJuice</strong>.</p>
-                <p>Not everyone makes it in. I’m only bringing in serious traders—the ones ready to execute and actually level up.</p>
-                <p>If that’s you, stay ready. Spots are extremely limited, and once they’re gone, they’re gone.</p>
-                <p>You’ll hear from me soon.</p>
-                <p><strong>Jay</strong></p>
-            </body>
-        </html>
-        """
-        schedule_email(email, "Your Application Just Got One Step Closer", processing_message_html, 7, is_html=True)
+        # # 3️⃣ **Processing Email (7 Hours Later)**
+        # processing_message_html = f"""\
+        # <html>
+        #     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        #         <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
+        #         <p>Your application just moved one step forward.</p>
+        #         <p>That means you showed commitment and readiness in your Typeform answers.</p>
+        #         <p>Right now, I’m personally reviewing your application to see if you’re the right fit for <strong>&TheJuice</strong>.</p>
+        #         <p>Not everyone makes it in. I’m only bringing in serious traders—the ones ready to execute and actually level up.</p>
+        #         <p>If that’s you, stay ready. Spots are extremely limited, and once they’re gone, they’re gone.</p>
+        #         <p>You’ll hear from me soon.</p>
+        #         <p><strong>Jay</strong></p>
+        #     </body>
+        # </html>
+        # """
+        # schedule_email(email, "Your Application Just Got One Step Closer", processing_message_html, 7, is_html=True)
 
-        # 4️⃣ **Acceptance Email (18 Hours Later)**
-        acceptance_message_html = f"""\
-        <html>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-               <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
+        # # 4️⃣ **Acceptance Email (18 Hours Later)**
+        # acceptance_message_html = f"""\
+        # <html>
+        #     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        #        <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
 
-                <p>Congratulations. You’ve officially been accepted to be a part of <strong>&TheJuice</strong>.</p>
+        #         <p>Congratulations. You’ve officially been accepted to be a part of <strong>&TheJuice</strong>.</p>
 
-                <p>Some members of &TheJuice paid off their subscription in their first month. Others passed their funded accounts for the first time. 
-                Whatever milestone you hit, my goal is to make sure you keep leveling up—consistently.</p>
+        #         <p>Some members of &TheJuice paid off their subscription in their first month. Others passed their funded accounts for the first time. 
+        #         Whatever milestone you hit, my goal is to make sure you keep leveling up—consistently.</p>
 
-                <p><strong>Secure your spot here before it’s gone:</strong> 
-                <a href="https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true" target="_blank">Click here to make your payment</a>.</p>
+        #         <p><strong>Secure your spot here before it’s gone:</strong> 
+        #         <a href="https://whop.com/checkout/plan_uAuyFvc2bfpZw?d2c=true" target="_blank">Click here to make your payment</a>.</p>
 
-                <p><strong>Before you make the payment, know this—what you’re about to access has already changed lives.</strong> 
-                It all depends on how badly you want it.</p>
+        #         <p><strong>Before you make the payment, know this—what you’re about to access has already changed lives.</strong> 
+        #         It all depends on how badly you want it.</p>
 
-                <p><strong>You’ll have access to:</strong></p>
-                <ul>
-                    <li>Attending and watching all the current and past Zoom meetings</li>
-                    <li>Watching all the course details in-depth and taking notes</li>
-                    <li>Competing for a chance to win funded accounts</li>
-                    <li>Q&A section to ask any questions you have</li>
-                </ul>
+        #         <p><strong>You’ll have access to:</strong></p>
+        #         <ul>
+        #             <li>Attending and watching all the current and past Zoom meetings</li>
+        #             <li>Watching all the course details in-depth and taking notes</li>
+        #             <li>Competing for a chance to win funded accounts</li>
+        #             <li>Q&A section to ask any questions you have</li>
+        #         </ul>
 
-                <p>Just to be fair… if you don’t reserve your seat, I’m going to have to move it to the next person in line.</p>
+        #         <p>Just to be fair… if you don’t reserve your seat, I’m going to have to move it to the next person in line.</p>
 
-                <p>Right now, payments are <strong>LIVE</strong>.</p>
+        #         <p>Right now, payments are <strong>LIVE</strong>.</p>
 
-                <p>You made it this far because you’re serious about growth. Now it’s time to show it.</p>
+        #         <p>You made it this far because you’re serious about growth. Now it’s time to show it.</p>
 
-                <p>See you inside,</p>
-                <p><strong>Jay</strong></p>
-            </body>
-        </html>
-        """
-        schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message_html, 18, is_html=True)
+        #         <p>See you inside,</p>
+        #         <p><strong>Jay</strong></p>
+        #     </body>
+        # </html>
+        # """
+        # schedule_email(email, "Your Results Are Out - One Final Step", acceptance_message_html, 18, is_html=True)
 
         return jsonify({"status": "success", "message": "Webhook received, emails scheduled"}), 200
 
