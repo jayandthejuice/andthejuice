@@ -121,8 +121,8 @@ def typeform_webhook():
         # 1️⃣ **Thank You Email** (Immediate)
         thank_you_message_html = f"""\
         <html>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
+            <body style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6; color: #333;">
+                <p>Hey {first_name},</p>
                 
                 <p>Your application is officially under review.</p>
                 
@@ -139,9 +139,11 @@ def typeform_webhook():
                 <p>See you on the inside…..hopefully 😉</p>
                 
                 <p>Best,</p>
-                <p><strong>Jay</strong></p>
+                
+                <p>Jay</p>
             </body>
         </html>
+
         """
         send_email(email, "Thank You for Your Application", thank_you_message_html, is_html=True)
 
