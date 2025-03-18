@@ -123,12 +123,22 @@ def typeform_webhook():
         <html>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
                 <p style="font-size: 16px; margin-bottom: 10px;">Hey {first_name},</p>
-                <p>Most traders stay stuck in the same cycle, never making real progress. But today, you did something different. You took action.</p>
+                
                 <p>Your application is officially under review.</p>
+                
                 <p>That means you’re already ahead of most traders who never even try.</p>
-                <p>Keep an eye on your inbox—your next update could be the one that changes everything.</p>
-                <p>In the meantime, stay locked in. If you’re serious about trading, check out my latest insights on <a href="https://www.instagram.com/jaynjuicee" target="_blank">@jaynjuicee</a>—this is just the beginning.</p>
-                <p>See you soon,</p>
+                
+                <p>If approved, we will contact you within the next 48 hours.</p>
+                
+                <p><strong>OR</strong></p>
+                
+                <p>Want to skip the wait? You can <a href="https://calendly.com/jayandthejuice/15" target="_blank" style="color: #007BFF; text-decoration: none;">book a call now</a> to see if you qualify.</p>
+                
+                <p>Most traders stay stuck in the same cycle, never making real progress. But today, you did something different. You took action.</p>
+                
+                <p>See you on the inside…..hopefully 😉</p>
+                
+                <p>Best,</p>
                 <p><strong>Jay</strong></p>
             </body>
         </html>
