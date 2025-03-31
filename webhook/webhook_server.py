@@ -108,8 +108,9 @@ def typeform_webhook():
                 <p>Hey {first_name},</p>
                 <p>Your application is officially under review.</p>
                 <p>If approved, we will contact you within the next 48 hours.</p>
-                <p>Want to skip the wait? You can <a href="https://calendly.com/jayandthejuice/15" target="_blank" style="color: #007BFF; text-decoration: none;">book a call now</a> to see if you qualify.</p>
-                <p>See you on the inside…..hopefully 😉</p>
+                <p>OR </p>
+                <p>If you’ve already scheduled your call through the Typeform— perfect don’t be late ! </p>
+                <p>See you on the inside…..hopefully 🫡</p>
                 <p>Best,</p>
                 <p>Jay</p>
             </body>
