@@ -110,7 +110,7 @@ def typeform_webhook():
                 <p>If approved, we will contact you within the next 48 hours.</p>
                 <p>OR </p>
                 <p>If you’ve already scheduled your call through the Typeform— perfect don’t be late ! </p>
-                <p>See you on the inside…..hopefully 🫡</p>
+                <p>See you on the inside...hopefully</p>
                 <p>Best,</p>
                 <p>Jay</p>
             </body>
